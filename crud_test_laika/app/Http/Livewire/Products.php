@@ -22,7 +22,7 @@ class Products extends Component
 
     public function __construct()
     {
-        $this->pagina = env('URL_API') . 'products';
+        $this->pagina = env('URL_API') . 'api/products';
     }
 
     public function render($url = '')
@@ -34,9 +34,13 @@ class Products extends Component
         } else {
             $this->pagina = $url;
         }
-        $response = Http::get($url);
+        $response = Http::withHeaders([
+            'api-key-laika' => env('API_KEY_LAIKA'),
+        ])->get($url);
         $products = $response->json();
-        $resCategory = Http::get(env('URL_API') . 'categories');
+        $resCategory = Http::withHeaders([
+            'api-key-laika' => env('API_KEY_LAIKA'),
+        ])->get(env('URL_API') . 'api/categories');
         $categorias = $resCategory->json();
         return view('livewire.products.view', ['products' => $products, 'categories' => $categorias],);
     }
@@ -53,6 +57,7 @@ class Products extends Component
         $this->description = null;
         $this->quantity = null;
         $this->status = null;
+        $this->categoria_id = null;
         $this->image = null;
     }
 
@@ -62,34 +67,42 @@ class Products extends Component
             'name' => 'required',
             'description' => 'required',
             'quantity' => 'required',
-            'status' => 'required',
             'categoria_id'=>'required'
             // 'image' => 'required',
         ]);
-
-        Product::create([
-            'name' => $this->name,
-            'description' => $this->description,
-            'quantity' => $this->quantity,
-            'status' => $this->status,
-            'image' => $this->image
+        $this->image='2.png';
+        $this->status=1;
+      
+        $response = Http::withHeaders([
+            'api-key-laika' => env('API_KEY_LAIKA'),
+        ])->post(env('URL_API').'api/products', [
+            'titulo' => $this->name,
+            'detalles' => $this->description,
+            'disponibles' => $this->quantity,
+            'estado' => $this->status,
+            'imagen' => $this->image,
+            'categoria'=> $this->categoria_id
         ]);
 
         $this->resetInput();
         $this->emit('closeModal');
-        session()->flash('message', 'Product Successfully created.');
+        $this->updateMode = false;
+        session()->flash('message', 'Producto creado correctamente.');
     }
 
     public function edit($id)
     {
-        $record = Product::findOrFail($id);
+        $record = Http::withHeaders([
+            'api-key-laika' => env('API_KEY_LAIKA'),
+        ])->get(env('URL_API').'api/products/'.$id)['data'];
+
         $this->selected_id = $id;
-        $this->name = $record->name;
-        $this->description = $record->description;
-        $this->quantity = $record->quantity;
-        $this->status = $record->status;
-        $this->image = $record->image;
-        $this->categoria_id = $record->category_id;
+        $this->name = $record[0]['titulo'];
+        $this->description = $record[0]['detalles'];
+        $this->quantity = $record[0]['disponibles'];
+        $this->status = $record[0]['estado'];
+        $this->image = env('URL_API').'img/'.$record[0]['imagen'];
+        $this->categoria_id = $record[0]['categoria_id'];
         $this->updateMode = true;
     }
 
@@ -99,19 +112,22 @@ class Products extends Component
             'name' => 'required',
             'description' => 'required',
             'quantity' => 'required',
-            'status' => 'required',
-            'image' => 'required',
             'categoria_id'=>'required'
+            // 'image' => 'required',
         ]);
 
         if ($this->selected_id) {
-            $record = Product::find($this->selected_id);
-            $record->update([
-                'name' => $this->name,
-                'description' => $this->description,
-                'quantity' => $this->quantity,
-                'status' => $this->status,
-                'image' => $this->image
+            $this->image='2.png';
+            $this->status=1;
+            $response = Http::withHeaders([
+                'api-key-laika' => env('API_KEY_LAIKA'),
+            ])->put(env('URL_API').'api/products/'.$this->selected_id, [
+                'titulo' => $this->name,
+                'detalles' => $this->description,
+                'disponibles' => $this->quantity,
+                'estado' => $this->status,
+                'imagen' => $this->image,
+                'categoria'=> $this->categoria_id
             ]);
 
             $this->resetInput();
@@ -123,8 +139,11 @@ class Products extends Component
     public function destroy($id)
     {
         if ($id) {
-            $record = Product::where('id', $id);
-            $record->delete();
+            $response = Http::withHeaders([
+                'api-key-laika' => env('API_KEY_LAIKA'),
+            ])->delete(env('URL_API').'api/products/'.$id);
+            // $record = Product::where('id', $id);
+            // $record->delete();
         }
     }
 }

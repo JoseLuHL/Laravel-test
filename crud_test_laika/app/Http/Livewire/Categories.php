@@ -21,8 +21,7 @@ class Categories extends Component
     public function __construct()
     {
        $this->cateController = new CategoryController();
-       $this->pagina = env('URL_API') .'products';
-
+       $this->pagina = env('URL_API') .'api/categories';
     }
 
     public function render($url='')
@@ -62,7 +61,9 @@ class Categories extends Component
 		'description' => 'required',
         ]);
 
-        $respuesta = Http::post(env('URL_API').'categories',[
+        $respuesta = Http::withHeaders([
+            'api-key-laika' => env('API_KEY_LAIKA'),
+        ])->post(env('URL_API').'api/categories',[
             'titulo' => $this-> name,
 			'detalles' => $this-> description
         ]);
@@ -75,7 +76,9 @@ class Categories extends Component
     public function edit($id)
     {
         // $record = Category::findOrFail($id);
-        $response = Http::get(env('URL_API').'categories/'.$id);
+        $response = Http::withHeaders([
+            'api-key-laika' => env('API_KEY_LAIKA'),
+        ])->get(env('URL_API').'api/categories/'.$id);
         $record = $response->json()['data'];
         $this->selected_id = $id; 
 		$this->name = $record['titulo'];
@@ -92,7 +95,9 @@ class Categories extends Component
 
         if ($this->selected_id) {
 
-            $response = Http::put(env('URL_API').'categories/'. $this->selected_id,[
+            $response = Http::withHeaders([
+                'api-key-laika' => env('API_KEY_LAIKA'),
+            ])->put(env('URL_API').'api/categories/'. $this->selected_id,[
                 'titulo' => $this-> name,
 			'detalles' => $this-> description
             ]);
@@ -105,7 +110,9 @@ class Categories extends Component
     public function destroy($id)
     {
         if ($id) {
-           $response = Http::delete(env('URL_API').'categories/'.$id);
+           $response = Http::withHeaders([
+            'api-key-laika' => env('API_KEY_LAIKA'),
+        ])->delete(env('URL_API').'api/categories/'.$id);
         }
     }
 }

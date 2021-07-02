@@ -4,6 +4,7 @@ use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Category\CategoryProductController;
 use App\Http\Controllers\Product\ProductCategoryController;
 use App\Http\Controllers\product\ProductController;
+use App\Http\Middleware\signatureMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,10 +24,8 @@ use Illuminate\Support\Facades\Route;
 // });
 
 //Categorys
-Route::resource('categories', CategoryController::class)->except([
-    'create', 'edit'
-]);
-Route::resource('categories.products', CategoryProductController::class);
+Route::resource('categories', CategoryController::class)->middleware(signatureMiddleware::class);;
+Route::resource('categories.products', CategoryProductController::class)->middleware(signatureMiddleware::class);;;
+
 //Products
-Route::resource('products', ProductController::class);
-Route::resource('products.categories', ProductCategoryController::class);
+Route::resource('products', ProductController::class)->middleware(signatureMiddleware::class);;;

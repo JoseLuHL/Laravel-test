@@ -16,7 +16,7 @@ trait ApiResponser
 
 	protected function errorResponse($message, $code)
 	{
-		return response()->json(['error' => $message, 'code' => $code], $code);
+		return response()->json(['message' => $message, 'code' => $code], $code);
 	}
 
 	protected function showAll(Collection $collection, $code = 200)
@@ -75,6 +75,14 @@ trait ApiResponser
 		return $this->successResponse($instance, $code);
 	}
 
+	protected function showOnee(array $instance, $code = 200)
+	{
+		// $transformer = $instance;
+		// $instance = $this->transformData($instance, $transformer);
+
+		return $this->successResponse(['data'=> $instance], $code);
+	}
+
 	protected function showMessage($message, $code = 200)
 	{
 		return $this->successResponse(['data' => $message], $code);
@@ -112,7 +120,7 @@ trait ApiResponser
 
 		$page = LengthAwarePaginator::resolveCurrentPage();
 
-		$perPage = 15;
+		$perPage = 25;
 		if (request()->has('per_page')) {
 			$perPage = (int) request()->per_page;
 		}

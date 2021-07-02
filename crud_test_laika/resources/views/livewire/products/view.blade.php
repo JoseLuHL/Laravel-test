@@ -14,7 +14,7 @@
                                 placeholder="Search Products">
                         </div>
                         <div class="btn btn-sm btn-info" data-toggle="modal" data-target="#exampleModal">
-                            <i class="fa fa-plus"></i> Add Products
+                            <i class="fa fa-plus"></i> Agregar producto
                         </div>
                     </div>
                 </div>
@@ -29,7 +29,7 @@
                                     <th>Nombre</th>
                                     <th>Categoria</th>
                                     <th>Disponible</th>
-                                    <th>Estado</th>
+                                    {{-- <th>Estado</th> --}}
                                     <th>Image</th>
                                     <td>ACCIONES</td>
                                 </tr>
@@ -41,14 +41,14 @@
                                         <td>{{ $row['titulo'] }}</td>
                                         <td>{{ $row['des_categoria'] }}</td>
                                         <td>{{ $row['disponibles'] }}</td>
-                                        <td>
+                                        {{-- <td>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" value=""
                                                     id="flexCheckChecked" @if ($row['estado'] == 1) checked @endif>
                                             </div>
-                                        </td>
+                                        </td> --}}
                                         <td>
-                                            <a href="{{ $row['imagen'] }}" target="_blanck">
+                                            <a href="{{ env('URL_API') }}img/{{ $row['imagen'] }}" target="_blanck">
                                                 <i class="far fa-images">
 
                                                 </i>
@@ -75,34 +75,33 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        {{--  <nav aria-label="Page navigation example">
+                         <nav aria-label="Page navigation example">
                             <ul class="pagination justify-content-center">
 
                                 <li class="page-item">
-                                    <a class="page-link" wire:click="@if (array_key_exists('previous', $products['meta']['pagination']['links'])) render('{{ $products['meta']['pagination']['links']['previous'] }}') @endif">Anterior</a>
+                                    <a class="page-link" wire:click="@if (array_key_exists('prev_page_url', $products)) render('{{ $products['prev_page_url']}}') @endif">Anterior</a>
 
                                 </li>
 
                                 <li class="page-item">
                                     <span
-                                        class="page-link">{{ $products['meta']['pagination']['current_page'] }}</span>
+                                        class="page-link">{{ $products['current_page']}}</span>
                                 </li>
 
                                 <li class="page-item">
                                     <span class="page-link">de</span>
                                 </li>
                                 <li class="page-item">
-                                    <span class="page-link">{{ $products['meta']['pagination']['total_pages'] }}</span>
+                                    <span class="page-link">{{ $products['to']}}</span>
                                 </li>
 
                                 <li class="page-item">
-                                    <a class="page-link" wire:click="@if (array_key_exists('next',
-                                        $products['meta']['pagination']['links'])) render('{{ $products['meta']['pagination']['links']['next'] }}') @endif">Siguiente</a>
+                                    <a class="page-link" wire:click="render('{{  $products['next_page_url'] }}')">Siguiente</a>
                                 </li>
                             </ul>
-                        </nav>  --}}
+                        </nav> 
 
-
+                        {{  $products['next_page_url'] }}
                     </div>
                 </div>
             </div>

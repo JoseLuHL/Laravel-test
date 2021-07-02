@@ -25,12 +25,27 @@
             </div>
             <div class="form-group">
                 <label for="status">Estado</label>
-                <input wire:model="status" type="checkbox"  id="status" placeholder="Estado">@error('status') <span class="error text-danger">{{ $message }}</span> @enderror
+                <input wire:model="status" type="hidden"  id="status" placeholder="Estado">@error('status') <span class="error text-danger">{{ $message }}</span> @enderror
             </div>
+
             <div class="form-group">
                 <label for="image">Imagen</label>
-                <input wire:model="image" type="file" class="form-control" id="image" placeholder="Image">@error('image') <span class="error text-danger">{{ $message }}</span> @enderror
+                <input wire:model="photo" type="file" class="form-control" id="image" placeholder="Image">@error('image') <span class="error text-danger">{{ $message }}</span> @enderror
             </div>
+
+            @if ($photo)
+            {{-- {{ $image = $photo->temporaryUrl()}} --}}
+        <img width="100" height="100" src="{{ $photo->temporaryUrl() }}">
+        @endif
+        @isset($image)
+        <a href="{{ $image }}" target="_blanck">
+            <i class="far fa-images">
+
+            </i>
+        </a>
+        @endisset
+        
+
             <h3>Categorias </h3>
             <select wire:model="categoria_id" id="categoria_id" class="form-select" size="10" >
                 <option value="0" selected>Selecciona una categoria</option>

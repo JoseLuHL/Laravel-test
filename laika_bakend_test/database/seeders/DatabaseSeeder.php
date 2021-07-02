@@ -19,10 +19,9 @@ class DatabaseSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');        
         Category::truncate();
         Product::truncate(); 
-        DB::table('category_product')->truncate();
 
-        $cantidadCategoria=10;
-        $cantidadProductos=200;
+        $cantidadCategoria=5;
+        $cantidadProductos=8;
 
         Category::factory($cantidadCategoria)->create();
        Product::factory($cantidadProductos)->create();

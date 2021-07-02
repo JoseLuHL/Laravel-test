@@ -13,7 +13,7 @@ class Product extends Model
 
     protected $table = 'products';
 
-    protected $fillable = ['name','description','quantity','status','image'];
+    protected $fillable = ['name','description','quantity','status','image','category_id'];
 	
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

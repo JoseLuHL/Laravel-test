@@ -15,9 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-	$resCategory= Http::get('http://192.168.1.4:8081/api/categories');
-	$categorias = $resCategory->json();
-    return view('welcome',['categories'=>$categorias]);
+    return view('welcome');
 });
 
 // Auth::routes();

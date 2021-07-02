@@ -41,7 +41,6 @@ class ProductTransformer extends TransformerAbstract
             'disponibles' => (string)$product->quantity,
             'estado' => (string)$product->status,
             'imagen'=> url("img/{$product->image}"),
-            ''=> url("img/{$product->image}"),
             'categoria' => (string)$product->category_id,
             'fechaCreacion' => (string)$product->created_at,
             'links' => [
